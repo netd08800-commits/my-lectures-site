@@ -121,15 +121,18 @@ button:hover {
 </div>
 
 <script>
-const data = [
-  { text: "Что такое переменная?", category: "Программирование" },
-  { text: "Формула квадрата суммы", category: "Математика" },
-  { text: "Сортировка пузырьком", category: "Алгоритмы" },
-  { text: "Что такое база данных?", category: "Программирование" }
-];
+const API = "https://api-lectures.netd08800.workers.dev";
 
 const list = document.getElementById("list");
 const searchInput = document.getElementById("search");
+
+let allData = [];
+
+async function loadData() {
+  const res = await fetch(API + "/api/get");
+  allData = await res.json();
+  render(allData);
+}
 
 function render(items) {
   list.innerHTML = "";
@@ -156,16 +159,15 @@ function render(items) {
   });
 }
 
-render(data);
-
 searchInput.addEventListener("input", () => {
   const value = searchInput.value.toLowerCase();
-  const filtered = data.filter(item =>
+  const filtered = allData.filter(item =>
     item.text.toLowerCase().includes(value)
   );
   render(filtered);
 });
-</script>
 
+loadData();
+</script>
 </body>
 </html>
